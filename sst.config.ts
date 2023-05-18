@@ -1,5 +1,5 @@
 import { SSTConfig } from "sst";
-import { API } from "./stacks/MyStack";
+import { API } from "./stacks/API";
 import { Database } from "./stacks/Database";
 import { Site } from "./stacks/Site";
 

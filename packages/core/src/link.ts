@@ -62,3 +62,12 @@ export async function create(shortPath: string, url: string) {
 
   return result.data;
 }
+
+export async function get(uid: string) {
+  const result = await LinkEntity.get({ uid }).go();
+  return result.data;
+}
+
+export async function list() {
+  const result = await LinkEntity.query.byUid({}).go();
+}

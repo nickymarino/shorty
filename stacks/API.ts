@@ -7,10 +7,17 @@ export function API({ stack }: StackContext) {
   const api = new Api(stack, "api", {
     routes: {
       "GET /": "packages/functions/src/lambda.handler",
+      "GET /link/{id}": {
+        function: {
+          functionName: `${stack.stackName}-LinkGet`,
+          handler: "packages/functions/src/link/get.handler",
+          bind: [table],
+        },
+      },
       "POST /link": {
         function: {
-          functionName: "LinkCreate",
-          handler: "packages/functions/src/create.handler",
+          functionName: `${stack.stackName}-LinkCreate`,
+          handler: "packages/functions/src/link/create.handler",
           bind: [table],
         },
       },
