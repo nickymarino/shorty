@@ -70,4 +70,5 @@ export async function get(uid: string) {
 
 export async function list() {
   const result = await LinkEntity.query.byUid({}).go();
+  return result.data;
 }

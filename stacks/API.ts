@@ -1,24 +1,39 @@
-import { StackContext, Api, use } from "sst/constructs";
+import { StackContext, Api, use, FunctionNameProps } from "sst/constructs";
 import { Database } from "./Database";
+
+function nameFor(shortName: string) {
+  const nameGenerator = (props: FunctionNameProps): string => {
+    return `${props.stack.stackName}-${shortName}`;
+  };
+  return nameGenerator;
+}
 
 export function API({ stack }: StackContext) {
   const { table } = use(Database);
 
   const api = new Api(stack, "api", {
+    defaults: {
+      function: {
+        bind: [table],
+      },
+    },
     routes: {
-      "GET /": "packages/functions/src/lambda.handler",
       "GET /link/{id}": {
         function: {
-          functionName: `${stack.stackName}-LinkGet`,
+          functionName: nameFor("LinkGet"),
           handler: "packages/functions/src/link/get.handler",
-          bind: [table],
         },
       },
       "POST /link": {
         function: {
-          functionName: `${stack.stackName}-LinkCreate`,
+          functionName: nameFor("LinkCreate"),
           handler: "packages/functions/src/link/create.handler",
-          bind: [table],
+        },
+      },
+      "GET /links": {
+        function: {
+          functionName: nameFor("LinkList"),
+          handler: "packages/functions/src/link/list.handler",
         },
       },
     },
