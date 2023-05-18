@@ -11,8 +11,8 @@ export default {
     };
   },
   stacks(app) {
-    app.stack(API);
     app.stack(Database);
+    app.stack(API);
     app.stack(Site);
   },
 } satisfies SSTConfig;

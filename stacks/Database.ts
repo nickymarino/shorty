@@ -20,5 +20,5 @@ export function Database({ stack }: StackContext) {
     },
   });
 
-  return table;
+  return { table };
 }
