@@ -6,10 +6,8 @@ export const handler = ApiHandler(async (_evt) => {
 
   if (!shortPath) {
     return {
-      body: {
-        statusCode: 400,
-        body: "shortPath is required",
-      },
+      statusCode: 400,
+      body: "shortPath is required",
     };
   }
 
@@ -18,10 +16,8 @@ export const handler = ApiHandler(async (_evt) => {
 
   if (foundLinks.length === 0) {
     return {
-      body: {
-        statusCode: 404,
-        body: "not found",
-      },
+      statusCode: 404,
+      body: "not found",
     };
   }
 

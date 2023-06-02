@@ -1,6 +1,7 @@
-import { Entity } from "electrodb";
+import { Entity, CreateEntityItem } from "electrodb";
 import { Dynamo } from "./dynamo";
 import { ulid } from "ulid";
+import { UpdateEntityItem } from "electrodb";
 
 export * as Link from "./link";
 
@@ -80,6 +81,16 @@ export async function get(uid: string) {
 
 export async function getByShortPath(shortPath: string) {
   const result = await LinkEntity.query.byShortPath({ shortPath }).go();
+  return result.data;
+}
+
+type PatchAttributes = UpdateEntityItem<typeof LinkEntity>;
+
+export async function patch(uid: string, newAttributes: PatchAttributes) {
+  const result = await LinkEntity.patch({ uid }).set(newAttributes).go({
+    response: "all_new",
+  });
+  console.log({ result });
   return result.data;
 }
 

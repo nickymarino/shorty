@@ -36,6 +36,12 @@ export function API({ stack }: StackContext) {
           handler: "packages/functions/src/link/create.handler",
         },
       },
+      "PATCH /link/{uid}": {
+        function: {
+          functionName: nameFor("LinkPatch"),
+          handler: "packages/functions/src/link/patch.handler",
+        },
+      },
       "GET /links": {
         function: {
           functionName: nameFor("LinkList"),
