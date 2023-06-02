@@ -1,8 +1,6 @@
 import { Link } from "@cow-link/core/link";
 import { ApiHandler, usePathParam } from "sst/node/api";
 
-// TODO: use sentry's (?) throw notFound(...)
-
 export const handler = ApiHandler(async (_evt) => {
   const shortPath = usePathParam("shortPath");
 

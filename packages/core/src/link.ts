@@ -24,7 +24,17 @@ export const LinkEntity = new Entity(
         type: "string",
         required: true,
       },
-      // TODO: Add createdAt, updatedAt, expiresAt?
+      createdAt: {
+        type: "number",
+        readOnly: true,
+        set: () => Date.now(),
+      },
+      updatedAt: {
+        type: "number",
+        readOnly: true,
+        watch: "*",
+        set: () => Date.now(),
+      },
     },
     indexes: {
       byUid: {
