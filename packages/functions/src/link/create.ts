@@ -1,12 +1,15 @@
 import { Link } from "@cow-link/core/link";
-import { ApiHandler, usePathParam } from "sst/node/api";
+import { ApiHandler, useJsonBody } from "sst/node/api";
+
+// TODO: use zod to verify the body matches
 
 export const handler = ApiHandler(async (_evt) => {
-  const newLink = await Link.create("test", "https://google.com");
+  const { url, shortPath } = useJsonBody();
+  const newLink = await Link.create(shortPath, url);
 
   return {
-    body: {
+    body: JSON.stringify({
       link: newLink,
-    },
+    }),
   };
 });

@@ -18,6 +18,12 @@ export function API({ stack }: StackContext) {
       },
     },
     routes: {
+      "GET /s/{shortPath}": {
+        function: {
+          functionName: nameFor("Redirect"),
+          handler: "packages/functions/src/redirect.handler",
+        },
+      },
       "GET /link/{id}": {
         function: {
           functionName: nameFor("LinkGet"),

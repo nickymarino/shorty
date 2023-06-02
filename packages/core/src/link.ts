@@ -38,7 +38,7 @@ export const LinkEntity = new Entity(
         },
       },
       byShortPath: {
-        index: "gsi1pk-gsi1sk-index",
+        index: "gsi1",
         pk: {
           field: "gsi1pk",
           composite: ["shortPath"],
@@ -65,6 +65,11 @@ export async function create(shortPath: string, url: string) {
 
 export async function get(uid: string) {
   const result = await LinkEntity.get({ uid }).go();
+  return result.data;
+}
+
+export async function getByShortPath(shortPath: string) {
+  const result = await LinkEntity.query.byShortPath({ shortPath }).go();
   return result.data;
 }
 
