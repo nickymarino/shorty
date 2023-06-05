@@ -8,11 +8,20 @@ import Copyright from "../Copyright";
 import { GetServerSideProps } from "next";
 import { Api } from "sst/node/api";
 import "util";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 
 type Link = {
   shortPath: string;
   url: string;
   uid: string;
+  createdAt: number;
+  updatedAt: number;
 };
 
 export const getServerSideProps: GetServerSideProps<{
@@ -25,7 +34,41 @@ export const getServerSideProps: GetServerSideProps<{
   return { props: data.body };
 };
 
-export default function Home({ links }: { links: Link[] }) {
+function LinkTable({ links }: { links: Link[] }) {
+  function toTimestamp(epoch: number) {
+    return new Date(epoch).toString();
+  }
+
+  return (
+    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <TableHead>
+        <TableRow>
+          <TableCell>Short Path</TableCell>
+          <TableCell>URL</TableCell>
+          <TableCell>Created</TableCell>
+          <TableCell>Updated</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {links.map((row) => (
+          <TableRow
+            key={row.uid}
+            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+          >
+            <TableCell component="th" scope="row">
+              {row.shortPath}
+            </TableCell>
+            <TableCell>{row.url}</TableCell>
+            <TableCell>{toTimestamp(row.createdAt)}</TableCell>
+            <TableCell>{toTimestamp(row.updatedAt)}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
+
+export default function Home({ links }: { links?: Link[] }) {
   console.log({ links });
   return (
     <Container maxWidth="lg">
@@ -41,17 +84,7 @@ export default function Home({ links }: { links: Link[] }) {
         <Typography variant="h4" component="h1" gutterBottom>
           Hello, world!
         </Typography>
-        {links &&
-          links.map((link) => (
-            <Typography
-              variant="body1"
-              component="p"
-              gutterBottom
-              key={link.uid}
-            >
-              {link.shortPath} - {link.url}
-            </Typography>
-          ))}
+        {links && LinkTable({ links })}
 
         <Link href="/about" color="secondary">
           Go to the about page
