@@ -6,7 +6,7 @@ import { Site } from "./stacks/Site";
 export default {
   config(_input) {
     return {
-      name: "cow-link",
+      name: "shorty",
       region: "us-east-1",
     };
   },
