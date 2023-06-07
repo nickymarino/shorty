@@ -1,6 +1,5 @@
-import { Link } from "@cow-link/core/link";
+import { Link } from "@shorty/core/link";
 import { ApiHandler, useJsonBody } from "sst/node/api";
-
 
 export const handler = ApiHandler(async (_evt) => {
   const { url, shortPath } = useJsonBody();
