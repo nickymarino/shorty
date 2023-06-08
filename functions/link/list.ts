@@ -1,4 +1,4 @@
-import { Link } from "@shorty/core/link";
+import { Link } from "@/functions/core/link";
 import { ApiHandler, usePathParam } from "sst/node/api";
 
 export const handler = ApiHandler(async (_evt) => {
