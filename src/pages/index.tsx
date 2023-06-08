@@ -31,7 +31,9 @@ export const getServerSideProps: GetServerSideProps<{
   const res = await fetch(endpoint);
   const data = await res.json();
 
-  return { props: data.body };
+  const retVal = { props: JSON.parse(data.body) };
+  console.log({ retVal });
+  return retVal;
 };
 
 function LinkTable({ links }: { links: Link[] }) {
