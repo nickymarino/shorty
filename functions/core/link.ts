@@ -10,7 +10,7 @@ export const LinkEntity = new Entity(
     model: {
       entity: "links",
       version: "1",
-      service: "cowlinks",
+      service: "shorty",
     },
     attributes: {
       uid: {
