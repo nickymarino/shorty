@@ -21,31 +21,31 @@ export function API({ stack }: StackContext) {
       "GET /s/{shortPath}": {
         function: {
           functionName: nameFor("Redirect"),
-          handler: "packages/functions/src/redirect.handler",
+          handler: "functions/redirect.handler",
         },
       },
       "GET /link/{id}": {
         function: {
           functionName: nameFor("LinkGet"),
-          handler: "packages/functions/src/link/get.handler",
+          handler: "functions/link/get.handler",
         },
       },
       "POST /link": {
         function: {
           functionName: nameFor("LinkCreate"),
-          handler: "packages/functions/src/link/create.handler",
+          handler: "functions/link/create.handler",
         },
       },
       "PATCH /link/{uid}": {
         function: {
           functionName: nameFor("LinkPatch"),
-          handler: "packages/functions/src/link/patch.handler",
+          handler: "functions/link/patch.handler",
         },
       },
       "GET /links": {
         function: {
           functionName: nameFor("LinkList"),
-          handler: "packages/functions/src/link/list.handler",
+          handler: "functions/link/list.handler",
         },
       },
     },
