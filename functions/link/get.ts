@@ -8,8 +8,8 @@ export const handler = ApiHandler(async (_evt) => {
   }
   const result = await Link.get(uid!);
   return {
-    body: {
+    body: JSON.stringify({
       link: result,
-    },
+    }),
   };
 });
