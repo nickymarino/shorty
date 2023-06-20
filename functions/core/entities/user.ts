@@ -70,6 +70,13 @@ export const User = new Entity(
           composite: [],
         },
       },
+      owns: {
+        index: "gsi2",
+        pk: {
+          field: "gsi2pk",
+          composite: ["userId"],
+        },
+      },
     },
   },
   Dynamo.Configuration
