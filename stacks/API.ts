@@ -24,6 +24,12 @@ export function API({ stack }: StackContext) {
           handler: "functions/redirect.handler",
         },
       },
+      "POST /user": {
+        function: {
+          functionName: nameFor("UserCreate"),
+          handler: "functions/user/create.handler",
+        },
+      },
       "GET /link/{id}": {
         function: {
           functionName: nameFor("LinkGet"),
