@@ -4,6 +4,13 @@ import { ulid } from "ulid";
 
 export * as User from "./user";
 
+/* RFC 5322 Format
+   See: https://stackabuse.com/validate-email-addresses-with-regular-expressions-in-javascript/
+*/
+const validEmailRegex = new RegExp(
+  "([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])"
+);
+
 export const UserEntity = new Entity(
   {
     model: {
@@ -19,6 +26,12 @@ export const UserEntity = new Entity(
       email: {
         type: "string",
         required: true,
+        validate: (email: string) => {
+          const isValid = validEmailRegex.test(email);
+          if (!isValid) {
+            return "Invalid email address";
+          }
+        },
       },
       createdAt: {
         type: "number",
