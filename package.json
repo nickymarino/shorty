@@ -6,7 +6,7 @@
     "dev": "sst bind next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --config .eslintrc.json functions src",
+    "lint": "eslint --config .eslintrc.json functions src stacks",
     "tsc": "tsc"
   },
   "dependencies": {
@@ -34,6 +34,7 @@
     "constructs": "10.1.156",
     "eslint": "^8.42.0",
     "eslint-config-next": "^13.4.4",
+    "eslint-config-prettier": "^8.8.0",
     "sst": "2.11.18",
     "vitest": "^0.31.1"
   },

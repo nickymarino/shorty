@@ -2,7 +2,7 @@ import { create, EmailNotUniqueError } from "@/functions/core/entities/user";
 import { ElectroValidationError } from "electrodb";
 import { ApiHandler, useJsonBody } from "sst/node/api";
 
-export const handler = ApiHandler(async (_evt) => {
+export const handler = ApiHandler(async () => {
   const { email } = useJsonBody();
 
   try {

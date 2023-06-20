@@ -1,7 +1,7 @@
 import { get, patch } from "@/functions/core/entities/link";
 import { ApiHandler, useJsonBody, usePathParam } from "sst/node/api";
 
-export const handler = ApiHandler(async (_evt) => {
+export const handler = ApiHandler(async () => {
   const linkUid = usePathParam("uid");
   const newAttributes = useJsonBody();
   if (!linkUid) {

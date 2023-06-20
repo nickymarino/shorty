@@ -26,7 +26,7 @@ type Link = {
 
 export const getServerSideProps: GetServerSideProps<{
   links: Link[];
-}> = async (context) => {
+}> = async () => {
   const endpoint = `${Api.api.url}/links`;
   const res = await fetch(endpoint);
   const data = await res.json();
