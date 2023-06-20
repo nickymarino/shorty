@@ -1,7 +1,7 @@
 import { create } from "@/functions/core/entities/link";
 import { ApiHandler, useJsonBody } from "sst/node/api";
 
-export const handler = ApiHandler(async (_evt) => {
+export const handler = ApiHandler(async () => {
   const { url, shortPath, userId } = useJsonBody();
   const newLink = await create({ shortPath, url, userId });
 

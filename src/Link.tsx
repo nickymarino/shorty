@@ -60,7 +60,7 @@ export type LinkProps = {
 // https://nextjs.org/docs/api-reference/next/link
 const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(props, ref) {
   const {
-    activeClassName = 'active',
+    activeClassName = "active",
     as,
     className: classNameProps,
     href,
@@ -70,7 +70,7 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(props,
     noLinkStyle,
     prefetch,
     replace,
-    role, // Link don't have roles.
+    // role, // Link don't have roles.
     scroll,
     shallow,
     ...other

@@ -1,7 +1,7 @@
 import { getByShortPath } from "@/functions/core/entities/link";
 import { ApiHandler, usePathParam } from "sst/node/api";
 
-export const handler = ApiHandler(async (_evt) => {
+export const handler = ApiHandler(async () => {
   const shortPath = usePathParam("shortPath");
 
   if (!shortPath) {
