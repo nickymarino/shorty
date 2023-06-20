@@ -1,5 +1,5 @@
 import { Dynamo } from "@/functions/core/dynamo";
-import { Entity, UpdateEntityItem } from "electrodb";
+import { CreateEntityItem, Entity, UpdateEntityItem } from "electrodb";
 import { ulid } from "ulid";
 
 export const Link = new Entity(
@@ -19,6 +19,10 @@ export const Link = new Entity(
         required: true,
       },
       url: {
+        type: "string",
+        required: true,
+      },
+      userId: {
         type: "string",
         required: true,
       },
@@ -56,16 +60,28 @@ export const Link = new Entity(
           composite: [],
         },
       },
+      user: {
+        index: "gsi2",
+        pk: {
+          field: "gsi2pk",
+          composite: ["userId"],
+        },
+        sk: {
+          field: "gsi2sk",
+          composite: [],
+        },
+      },
     },
   },
   Dynamo.Configuration
 );
 
-export async function create(shortPath: string, url: string) {
+type CreateProperties = Omit<CreateEntityItem<typeof Link>, "linkId">;
+
+export async function create(link: CreateProperties) {
   const result = await Link.create({
     linkId: ulid(),
-    shortPath,
-    url,
+    ...link,
   }).go();
 
   return result.data;
