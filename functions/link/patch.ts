@@ -20,7 +20,7 @@ export const handler = ApiHandler(async (_evt) => {
     };
   }
 
-  const updatedLink = await patch(foundLink.uid, newAttributes);
+  const updatedLink = await patch(foundLink.linkId, newAttributes);
   console.log({ updatedLink });
 
   return {

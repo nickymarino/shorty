@@ -10,7 +10,7 @@ export const Link = new Entity(
       service: "shorty",
     },
     attributes: {
-      uid: {
+      linkId: {
         type: "string",
         required: true,
       },
@@ -35,14 +35,14 @@ export const Link = new Entity(
       },
     },
     indexes: {
-      byUid: {
+      byId: {
         pk: {
           field: "pk",
           composite: [],
         },
         sk: {
           field: "sk",
-          composite: ["uid"],
+          composite: ["linkId"],
         },
       },
       byShortPath: {
@@ -63,7 +63,7 @@ export const Link = new Entity(
 
 export async function create(shortPath: string, url: string) {
   const result = await Link.create({
-    uid: ulid(),
+    linkId: ulid(),
     shortPath,
     url,
   }).go();
@@ -71,8 +71,8 @@ export async function create(shortPath: string, url: string) {
   return result.data;
 }
 
-export async function get(uid: string) {
-  const result = await Link.get({ uid }).go();
+export async function get(linkId: string) {
+  const result = await Link.get({ linkId }).go();
   return result.data;
 }
 
@@ -83,8 +83,8 @@ export async function getByShortPath(shortPath: string) {
 
 type PatchAttributes = UpdateEntityItem<typeof Link>;
 
-export async function patch(uid: string, newAttributes: PatchAttributes) {
-  const result = await Link.patch({ uid }).set(newAttributes).go({
+export async function patch(linkId: string, newAttributes: PatchAttributes) {
+  const result = await Link.patch({ linkId }).set(newAttributes).go({
     response: "all_new",
   });
   console.log({ result });
@@ -92,6 +92,6 @@ export async function patch(uid: string, newAttributes: PatchAttributes) {
 }
 
 export async function list() {
-  const result = await Link.query.byUid({}).go();
+  const result = await Link.query.byId({}).go();
   return result.data;
 }
