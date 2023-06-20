@@ -1,11 +1,10 @@
 import { Dynamo } from "@/functions/core/dynamo";
 import { Entity } from "electrodb";
-export * as Constraint from "./constraint";
 
-export const ConstraintEntity = new Entity(
+export const Constraint = new Entity(
   {
     model: {
-      entity: "constraints",
+      entity: "constraint",
       version: "1",
       service: "shorty",
     },

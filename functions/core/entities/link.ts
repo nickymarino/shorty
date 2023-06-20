@@ -1,14 +1,11 @@
-import { Entity, CreateEntityItem } from "electrodb";
-import { Dynamo } from "./dynamo";
+import { Dynamo } from "@/functions/core/dynamo";
+import { Entity, UpdateEntityItem } from "electrodb";
 import { ulid } from "ulid";
-import { UpdateEntityItem } from "electrodb";
 
-export * as Link from "./link";
-
-export const LinkEntity = new Entity(
+export const Link = new Entity(
   {
     model: {
-      entity: "links",
+      entity: "link",
       version: "1",
       service: "shorty",
     },
@@ -65,7 +62,7 @@ export const LinkEntity = new Entity(
 );
 
 export async function create(shortPath: string, url: string) {
-  const result = await LinkEntity.create({
+  const result = await Link.create({
     uid: ulid(),
     shortPath,
     url,
@@ -75,19 +72,19 @@ export async function create(shortPath: string, url: string) {
 }
 
 export async function get(uid: string) {
-  const result = await LinkEntity.get({ uid }).go();
+  const result = await Link.get({ uid }).go();
   return result.data;
 }
 
 export async function getByShortPath(shortPath: string) {
-  const result = await LinkEntity.query.byShortPath({ shortPath }).go();
+  const result = await Link.query.byShortPath({ shortPath }).go();
   return result.data;
 }
 
-type PatchAttributes = UpdateEntityItem<typeof LinkEntity>;
+type PatchAttributes = UpdateEntityItem<typeof Link>;
 
 export async function patch(uid: string, newAttributes: PatchAttributes) {
-  const result = await LinkEntity.patch({ uid }).set(newAttributes).go({
+  const result = await Link.patch({ uid }).set(newAttributes).go({
     response: "all_new",
   });
   console.log({ result });
@@ -95,6 +92,6 @@ export async function patch(uid: string, newAttributes: PatchAttributes) {
 }
 
 export async function list() {
-  const result = await LinkEntity.query.byUid({}).go();
+  const result = await Link.query.byUid({}).go();
   return result.data;
 }

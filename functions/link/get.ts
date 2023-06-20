@@ -1,4 +1,4 @@
-import { Link } from "@/functions/core/link";
+import { get } from "@/functions/core/entities/link";
 import { ApiHandler, usePathParam } from "sst/node/api";
 
 export const handler = ApiHandler(async (_evt) => {
@@ -6,7 +6,7 @@ export const handler = ApiHandler(async (_evt) => {
   if (!uid) {
     throw new Error("Missing id");
   }
-  const result = await Link.get(uid!);
+  const result = await get(uid!);
   return {
     body: JSON.stringify({
       link: result,
