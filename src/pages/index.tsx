@@ -19,7 +19,7 @@ import {
 type Link = {
   shortPath: string;
   url: string;
-  uid: string;
+  linkId: string;
   createdAt: number;
   updatedAt: number;
 };
@@ -54,7 +54,7 @@ function LinkTable({ links }: { links: Link[] }) {
       <TableBody>
         {links.map((row) => (
           <TableRow
-            key={row.uid}
+            key={row.linkId}
             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
           >
             <TableCell component="th" scope="row">

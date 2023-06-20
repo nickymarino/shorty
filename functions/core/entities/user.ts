@@ -27,7 +27,7 @@ export const User = new Entity(
       service: "shorty",
     },
     attributes: {
-      uid: {
+      userId: {
         type: "string",
         required: true,
       },
@@ -49,10 +49,10 @@ export const User = new Entity(
       },
     },
     indexes: {
-      byUid: {
+      byId: {
         pk: {
           field: "pk",
-          composite: ["uid"],
+          composite: ["userId"],
         },
         sk: {
           field: "sk",
@@ -89,7 +89,7 @@ export async function create(email: string) {
   const result = await userConstraintService.transaction
     .write(({ User, Constraint }) => [
       User.create({
-        uid: ulid(),
+        userId: ulid(),
         email,
       }).commit(),
       Constraint.create({
