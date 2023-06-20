@@ -13,6 +13,10 @@ export const handler = ApiHandler(async (_evt) => {
       }),
     };
   } catch (e) {
+    // Log the error no matter what
+    console.error({ e });
+
+    // Handle known error types
     if (e instanceof ElectroValidationError) {
       return {
         statusCode: 400,
@@ -23,12 +27,19 @@ export const handler = ApiHandler(async (_evt) => {
           },
         }),
       };
+    } else if (e instanceof User.EmailNotUniqueError) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          error: {
+            message: "Email already in use",
+          },
+        }),
+      };
     }
-
-    // Otherwise, log it
-    console.error({ e });
   }
 
+  // Fallback on 500
   return {
     statusCode: 500,
     body: JSON.stringify({
