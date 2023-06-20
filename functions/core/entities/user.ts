@@ -1,9 +1,7 @@
-import { ConstraintEntity } from "@/functions/core/constraint";
+import { Constraint } from "@/functions/core/entities/constraint";
 import { Dynamo } from "@/functions/core/dynamo";
 import { Entity, Service } from "electrodb";
 import { ulid } from "ulid";
-
-export * as User from "./user";
 
 /* RFC 5322 Format
    See: https://stackabuse.com/validate-email-addresses-with-regular-expressions-in-javascript/
@@ -21,10 +19,10 @@ const validateEmail = (email: string) => {
   }
 };
 
-export const UserEntity = new Entity(
+export const User = new Entity(
   {
     model: {
-      entity: "users",
+      entity: "user",
       version: "1",
       service: "shorty",
     },
@@ -81,28 +79,24 @@ export async function create(email: string) {
   // Enforce unique email constraint on users
   const userConstraintService = new Service(
     {
-      user: UserEntity,
-      constraint: ConstraintEntity,
+      User,
+      Constraint,
     },
     Dynamo.Configuration
   );
 
   // From: https://electrodb.dev/en/mutations/transact-write/#example---unique-constraint
   const result = await userConstraintService.transaction
-    .write(({ user, constraint }) => [
-      user
-        .create({
-          uid: ulid(),
-          email,
-        })
-        .commit(),
-      constraint
-        .create({
-          name: "email",
-          value: email,
-          entity: user.schema.model.entity,
-        })
-        .commit(),
+    .write(({ User, Constraint }) => [
+      User.create({
+        uid: ulid(),
+        email,
+      }).commit(),
+      Constraint.create({
+        name: "email",
+        value: email,
+        entity: User.schema.model.entity,
+      }).commit(),
     ])
     .go();
 
@@ -111,6 +105,6 @@ export async function create(email: string) {
   }
 
   // Transaction writes can't return the values, so we have to query for them by email
-  const user = await UserEntity.query.byEmail({ email }).go();
+  const user = await User.query.byEmail({ email }).go();
   return user.data;
 }

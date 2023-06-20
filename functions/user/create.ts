@@ -1,4 +1,4 @@
-import { User } from "@/functions/core/user";
+import { create, EmailNotUniqueError } from "@/functions/core/entities/user";
 import { ElectroValidationError } from "electrodb";
 import { ApiHandler, useJsonBody } from "sst/node/api";
 
@@ -6,7 +6,7 @@ export const handler = ApiHandler(async (_evt) => {
   const { email } = useJsonBody();
 
   try {
-    const newUser = await User.create(email);
+    const newUser = await create(email);
     return {
       body: JSON.stringify({
         user: newUser,
@@ -27,7 +27,7 @@ export const handler = ApiHandler(async (_evt) => {
           },
         }),
       };
-    } else if (e instanceof User.EmailNotUniqueError) {
+    } else if (e instanceof EmailNotUniqueError) {
       return {
         statusCode: 400,
         body: JSON.stringify({

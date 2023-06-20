@@ -1,4 +1,4 @@
-import { Link } from "@/functions/core/link";
+import { get, patch } from "@/functions/core/entities/link";
 import { ApiHandler, useJsonBody, usePathParam } from "sst/node/api";
 
 export const handler = ApiHandler(async (_evt) => {
@@ -11,7 +11,7 @@ export const handler = ApiHandler(async (_evt) => {
     };
   }
 
-  const foundLink = await Link.get(linkUid);
+  const foundLink = await get(linkUid);
   console.log({ foundLink });
   if (!foundLink) {
     return {
@@ -20,7 +20,7 @@ export const handler = ApiHandler(async (_evt) => {
     };
   }
 
-  const updatedLink = await Link.patch(foundLink.uid, newAttributes);
+  const updatedLink = await patch(foundLink.uid, newAttributes);
   console.log({ updatedLink });
 
   return {

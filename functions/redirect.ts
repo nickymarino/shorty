@@ -1,4 +1,4 @@
-import { Link } from "@/functions/core/link";
+import { getByShortPath } from "@/functions/core/entities/link";
 import { ApiHandler, usePathParam } from "sst/node/api";
 
 export const handler = ApiHandler(async (_evt) => {
@@ -11,7 +11,7 @@ export const handler = ApiHandler(async (_evt) => {
     };
   }
 
-  const foundLinks = await Link.getByShortPath(shortPath);
+  const foundLinks = await getByShortPath(shortPath);
   console.log({ foundLinks });
 
   if (foundLinks.length === 0) {
