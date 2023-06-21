@@ -1,4 +1,5 @@
 import { Dynamo } from "@/functions/core/dynamo";
+import { serviceName } from "@/functions/core/service";
 import { CreateEntityItem, Entity, UpdateEntityItem } from "electrodb";
 import { ulid } from "ulid";
 
@@ -7,7 +8,7 @@ export const Link = new Entity(
     model: {
       entity: "link",
       version: "1",
-      service: "shorty",
+      service: serviceName,
     },
     attributes: {
       linkId: {

@@ -1,4 +1,5 @@
 import { Dynamo } from "@/functions/core/dynamo";
+import { serviceName } from "@/functions/core/service";
 import { Entity } from "electrodb";
 
 export const Constraint = new Entity(
@@ -6,7 +7,7 @@ export const Constraint = new Entity(
     model: {
       entity: "constraint",
       version: "1",
-      service: "shorty",
+      service: serviceName,
     },
     attributes: {
       name: {
