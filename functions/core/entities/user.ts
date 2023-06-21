@@ -2,6 +2,7 @@ import { Constraint } from "@/functions/core/entities/constraint";
 import { Dynamo } from "@/functions/core/dynamo";
 import { Entity, Service } from "electrodb";
 import { ulid } from "ulid";
+import { serviceName } from "@/functions/core/service";
 
 /* RFC 5322 Format
    See: https://stackabuse.com/validate-email-addresses-with-regular-expressions-in-javascript/
@@ -23,7 +24,7 @@ export const User = new Entity(
     model: {
       entity: "user",
       version: "1",
-      service: "shorty",
+      service: serviceName,
     },
     attributes: {
       userId: {
