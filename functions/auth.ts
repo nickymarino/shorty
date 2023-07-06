@@ -51,7 +51,7 @@ export const handler = AuthHandler({
         const user = await userFromGithubToken(accessToken);
 
         return Session.parameter({
-          redirect: "https://example.com",
+          redirect: "http://localhost:3000/callback",
           type: "user",
           properties: {
             userID: user.userId,

@@ -9,6 +9,7 @@ import { GetServerSideProps } from "next";
 import { Api } from "sst/node/api";
 import "util";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -86,6 +87,10 @@ export default function Home({ links }: { links?: Link[] }) {
         <Typography variant="h4" component="h1" gutterBottom>
           Hello, world!
         </Typography>
+
+        <Link href="https://j7tgyxxjg4.execute-api.us-east-1.amazonaws.com/auth/github/authorize">
+          <Button>Login with GitHub</Button>
+        </Link>
         {links && LinkTable({ links })}
 
         <Link href="/about" color="secondary">
