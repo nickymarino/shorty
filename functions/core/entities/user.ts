@@ -101,5 +101,17 @@ export async function create(props: CreateProperties) {
 
   // Transaction writes can't return the values, so we have to query for them by email
   const user = await User.query.byGithubId({ githubId: props.githubId }).go();
-  return user.data;
+  return user.data[0];
+}
+
+export async function findOrCreateByGithubId(githubId: number) {
+  const foundUser = await User.query.byGithubId({ githubId }).go();
+  console.log({ foundUser });
+  if (foundUser.data.length > 0) {
+    console.log("Returning known user");
+    return foundUser.data[0];
+  }
+
+  console.log("Creating new user");
+  return create({ githubId });
 }

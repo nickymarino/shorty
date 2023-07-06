@@ -1,3 +1,4 @@
+import { findOrCreateByGithubId } from "@/functions/core/entities/user";
 import { AuthHandler, GithubAdapter, Session } from "sst/node/auth";
 import { Config } from "sst/node/config";
 
@@ -7,6 +8,25 @@ declare module "sst/node/auth" {
       userID: string;
     };
   }
+}
+
+async function findGithubUserId(accessToken: string) {
+  const response = await fetch("https://api.github.com/user", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const body = await response.json();
+  return body.id;
+}
+
+async function userFromGithubToken(token: string) {
+  const userGitHubId = await findGithubUserId(token);
+  console.log({ userGitHubId });
+  const user = await findOrCreateByGithubId(userGitHubId);
+  console.log({ user });
+  return user;
 }
 
 export const handler = AuthHandler({
@@ -23,31 +43,18 @@ export const handler = AuthHandler({
       clientID: Config.GITHUB_CLIENT_ID,
       clientSecret: Config.GITHUB_CLIENT_SECRET,
       scope: "", // empty = read only, public values
-      onSuccess: async (tokenset, client) => {
-        console.log({ tokenset, client });
-
+      onSuccess: async (tokenset) => {
         const accessToken = tokenset.access_token;
-        const response = await fetch("https://api.github.com/user", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        const body = await response.json();
-
-        const userGitHubId = body.id;
-        // TODO: from here, find our user ID based on github ID, and
-        //       return a Session.parameter with our user ID
-
-        console.log({ response });
-        console.log({ body });
-        console.log({ userGitHubId });
+        if (!accessToken) {
+          throw new Error("No access token");
+        }
+        const user = await userFromGithubToken(accessToken);
 
         return Session.parameter({
           redirect: "https://example.com",
           type: "user",
           properties: {
-            userID: "1234",
+            userID: user.userId,
           },
         });
       },
