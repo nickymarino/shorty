@@ -88,9 +88,12 @@ export default function Home({ links }: { links?: Link[] }) {
           Hello, world!
         </Typography>
 
-        <Link href="https://j7tgyxxjg4.execute-api.us-east-1.amazonaws.com/auth/github/authorize">
+        <Link
+          href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/github/authorize`}
+        >
           <Button>Login with GitHub</Button>
         </Link>
+
         {links && LinkTable({ links })}
 
         <Link href="/about" color="secondary">
