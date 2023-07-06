@@ -1,23 +1,10 @@
 import { Constraint } from "@/functions/core/entities/constraint";
 import { Dynamo } from "@/functions/core/dynamo";
-import { Entity, Service } from "electrodb";
+import { CreateEntityItem, Entity, Service } from "electrodb";
 import { ulid } from "ulid";
 import { serviceName } from "@/functions/core/service";
 
-/* RFC 5322 Format
-   See: https://stackabuse.com/validate-email-addresses-with-regular-expressions-in-javascript/
-*/
-const validEmailRegex =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-export class EmailNotUniqueError extends Error {}
-
-const validateEmail = (email: string) => {
-  const isValid = validEmailRegex.test(email);
-  if (!isValid) {
-    return "Invalid email address";
-  }
-};
+export class GithubIdNotUniqueError extends Error {}
 
 export const User = new Entity(
   {
@@ -31,10 +18,9 @@ export const User = new Entity(
         type: "string",
         required: true,
       },
-      email: {
-        type: "string",
+      githubId: {
+        type: "number",
         required: true,
-        validate: validateEmail,
       },
       createdAt: {
         type: "number",
@@ -59,11 +45,11 @@ export const User = new Entity(
           composite: [],
         },
       },
-      byEmail: {
+      byGithubId: {
         index: "gsi1",
         pk: {
           field: "gsi1pk",
-          composite: ["email"],
+          composite: ["githubId"],
         },
         sk: {
           field: "gsi1sk",
@@ -82,7 +68,9 @@ export const User = new Entity(
   Dynamo.Configuration
 );
 
-export async function create(email: string) {
+type CreateProperties = Omit<CreateEntityItem<typeof User>, "userId">;
+
+export async function create(props: CreateProperties) {
   // Enforce unique email constraint on users
   const userConstraintService = new Service(
     {
@@ -97,21 +85,33 @@ export async function create(email: string) {
     .write(({ User, Constraint }) => [
       User.create({
         userId: ulid(),
-        email,
+        githubId: props.githubId,
       }).commit(),
       Constraint.create({
-        name: "email",
-        value: email,
+        name: "user-githubId",
+        value: props.githubId.toString(),
         entity: User.schema.model.entity,
       }).commit(),
     ])
     .go();
 
   if (result.canceled) {
-    throw new EmailNotUniqueError(`Could not create user: ${result.data}`);
+    throw new GithubIdNotUniqueError(`Could not create user: ${result.data}`);
   }
 
   // Transaction writes can't return the values, so we have to query for them by email
-  const user = await User.query.byEmail({ email }).go();
-  return user.data;
+  const user = await User.query.byGithubId({ githubId: props.githubId }).go();
+  return user.data[0];
+}
+
+export async function findOrCreateByGithubId(githubId: number) {
+  const foundUser = await User.query.byGithubId({ githubId }).go();
+  console.log({ foundUser });
+  if (foundUser.data.length > 0) {
+    console.log("Returning known user");
+    return foundUser.data[0];
+  }
+
+  console.log("Creating new user");
+  return create({ githubId });
 }

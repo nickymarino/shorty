@@ -1,12 +1,12 @@
-import { create, EmailNotUniqueError } from "@/functions/core/entities/user";
+import { create, GithubIdNotUniqueError } from "@/functions/core/entities/user";
 import { ElectroValidationError } from "electrodb";
 import { ApiHandler, useJsonBody } from "sst/node/api";
 
 export const handler = ApiHandler(async () => {
-  const { email } = useJsonBody();
+  const { githubId } = useJsonBody();
 
   try {
-    const newUser = await create(email);
+    const newUser = await create({ githubId });
     return {
       body: JSON.stringify({
         user: newUser,
@@ -27,12 +27,12 @@ export const handler = ApiHandler(async () => {
           },
         }),
       };
-    } else if (e instanceof EmailNotUniqueError) {
+    } else if (e instanceof GithubIdNotUniqueError) {
       return {
         statusCode: 400,
         body: JSON.stringify({
           error: {
-            message: "Email already in use",
+            message: "Github ID already exists",
           },
         }),
       };
@@ -43,7 +43,7 @@ export const handler = ApiHandler(async () => {
   return {
     statusCode: 500,
     body: JSON.stringify({
-      error: "Internal server error",
+      error: "Could not create user",
     }),
   };
 });
